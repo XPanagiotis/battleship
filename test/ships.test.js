@@ -1,4 +1,3 @@
-import test from "node:test";
 import { Ship } from "../src/ships";
 
 test("ship should be able to be hit", () => {

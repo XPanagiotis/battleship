@@ -1,4 +1,4 @@
-export const Ship = function (lenght) {
+export const Ship = function (length) {
   let hits = 0;
 
   const hit = () => {
@@ -6,8 +6,8 @@ export const Ship = function (lenght) {
   };
 
   const isSunk = () => {
-    return hits >= lenght;
+    return hits >= length;
   };
 
-  return { lenght, hit, isSunk };
+  return { length, hit, isSunk };
 };
