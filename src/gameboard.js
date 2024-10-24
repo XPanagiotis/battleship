@@ -22,12 +22,12 @@ export const Gameboard = function () {
 
   function receiveAttack(x, y) {
     const target = board[x][y];
-    if (target) {
-      target.hit();
-      return true;
-    } else {
+    if (target == null) {
       board[x][y] = "miss";
       return false;
+    } else if (target !== "miss") {
+      target.hit();
+      return true;
     }
   }
 

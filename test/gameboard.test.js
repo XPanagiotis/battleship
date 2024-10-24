@@ -18,6 +18,5 @@ test("should be able to report if all the ships have been sunk", () => {
   gameboard.receiveAttack(2, 2);
   gameboard.receiveAttack(0, 0);
   gameboard.receiveAttack(1, 0);
-
   expect(gameboard.allShipsSunk()).toBe(true);
 });
