@@ -1,5 +1,3 @@
-import { Ship } from "./ships";
-
 export const Gameboard = function () {
   const board = Array(10)
     .fill(null)
@@ -11,10 +9,12 @@ export const Gameboard = function () {
     if (direction == "h") {
       for (let i = 0; i < ship.length; i++) {
         board[x][y + i] = ship;
+        ship.positions.push([x, y + i]);
       }
     } else {
       for (let i = 0; i < ship.length; i++) {
         board[x + i][y] = ship;
+        ship.positions.push([x + i, y]);
       }
     }
     ships.push(ship);
@@ -24,10 +24,12 @@ export const Gameboard = function () {
     const target = board[x][y];
     if (target == null) {
       board[x][y] = "miss";
-      return false;
+      return { hit: false, sunk: false };
     } else if (target !== "miss") {
       target.hit();
-      return true;
+      return { hit: true, sunk: target.isSunk(), ship: target };
+    } else {
+      return { hit: true, sunk: true, ship: target };
     }
   }
 

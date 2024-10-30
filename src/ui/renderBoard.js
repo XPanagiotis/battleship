@@ -12,15 +12,15 @@ function createBoard() {
   const table = createDOMElement("table", "board-table");
   const tableBody = createDOMElement("tbody");
 
-  //create rows
+  // Create rows
   for (var i = 0; i < 10; i++) {
     var boardRow = createDOMElement("tr", "board-row");
 
-    //create columns
+    // Create columns
     for (var j = 0; j < 10; j++) {
       var boardColumn = createDOMElement("td", "board-cell");
       boardColumn.dataset.cors = `${[i, j]}`;
-      //place indicators in the first row
+      // Place indicators in the first row
       if (j <= 10 && i === 0) {
         const indicator = createDOMElement(
           "div",
@@ -30,7 +30,7 @@ function createBoard() {
         boardColumn.appendChild(indicator);
       }
 
-      //place indicators in the first column
+      // Place indicators in the first column
       if (j === 0) {
         const indicator = createDOMElement(
           "div",

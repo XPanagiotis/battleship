@@ -1,5 +1,6 @@
 export const Ship = function (length) {
   let hits = 0;
+  const positions = [];
 
   const hit = () => {
     hits++;
@@ -9,5 +10,5 @@ export const Ship = function (length) {
     return hits >= length;
   };
 
-  return { length, hit, isSunk };
+  return { length, hit, isSunk, positions };
 };

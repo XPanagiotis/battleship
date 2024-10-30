@@ -6,11 +6,8 @@ import { Player } from "../src/player";
 import { Gameboard } from "../src/gameboard";
 import { renderBoard } from "./ui/renderBoard";
 import { Ship } from "../src/ships";
-import { renderHit } from "./ui/renderAttack";
-import { renderMiss } from "./ui/renderAttack";
 import { events } from "./pubSupPattern";
-import { getImmediateDiagonalCells } from "./ui/helperFunctions";
-import { getCors } from "./ui/helperFunctions";
+import { handleAttack } from "./handleAttack";
 
 function newGame() {
   const player1 = Player();
@@ -24,66 +21,32 @@ function newGame() {
 
   renderBoard();
 
-  //create ships manualy
-  const ship5 = Ship(5);
-  const ship4 = Ship(4);
-  const ship3 = Ship(3);
-  const ship3b = Ship(3);
-  const ship2 = Ship(2);
-  const ship2b = Ship(2);
-  //manualy populate each player gameboard
-  gamenboard1.placeShip(1, 1, ship5, "h");
-  gamenboard1.placeShip(4, 2, ship3, "h");
-  gamenboard1.placeShip(8, 1, ship2, "h");
-  gamenboard1.placeShip(1, 8, ship4, "v");
-  gamenboard1.placeShip(6, 9, ship3b, "v");
-  gamenboard1.placeShip(7, 6, ship2b, "v");
-  gamenboard2.placeShip(1, 1, ship5, "h");
-  gamenboard2.placeShip(4, 2, ship3, "h");
-  gamenboard2.placeShip(8, 1, ship2, "h");
-  gamenboard2.placeShip(1, 8, ship4, "v");
-  gamenboard2.placeShip(6, 9, ship3b, "v");
-  gamenboard2.placeShip(7, 6, ship2b, "v");
+  // Define ship lengths and positions
+  const ships = [
+    { length: 5, x: 1, y: 1, direction: "h" },
+    { length: 4, x: 1, y: 8, direction: "v" },
+    { length: 3, x: 4, y: 2, direction: "h" },
+    { length: 3, x: 6, y: 9, direction: "v" },
+    { length: 2, x: 7, y: 6, direction: "v" },
+    { length: 2, x: 8, y: 1, direction: "h" },
+  ];
 
+  // Place ships for both players
+  ships.forEach(({ length, x, y, direction }) => {
+    const ship1 = Ship(length);
+    const ship2 = Ship(length);
+    gamenboard1.placeShip(x, y, ship1, direction);
+    gamenboard2.placeShip(x, y, ship2, direction);
+  });
+
+  // Add click events to enemy board cells
   const board = document.querySelectorAll(".enemy-gameboard .board-cell");
 
   board.forEach((cell) => {
-    cell.addEventListener("click", handleAttack);
+    cell.addEventListener("click", () => {
+      handleAttack(player1, gamenboard2, cell);
+    });
   });
-
-  function handleAttack() {
-    const attackedCell = getCors(this);
-    const x = attackedCell[0];
-    const y = attackedCell[1];
-
-    if (player1.attackEnemy(gamenboard2, x, y)) {
-      renderHit(this);
-
-      //get the diagonal cells of the hitted cell
-      const missedCells = getImmediateDiagonalCells(x, y);
-
-      //render the diagonal cells
-      missedCells.forEach((cellCors) => {
-        //give the "miss" value to each cell
-        player1.attackEnemy(gamenboard2, cellCors[0], cellCors[1]);
-
-        //select the cell from the DOM
-        const cors = String(cellCors);
-        const cell = document.querySelectorAll(
-          `.enemy-gameboard [data-cors="${cors}"]`
-        )[0];
-
-        //render the cell
-        renderMiss(cell);
-
-        //remove Event Listener
-        cell.removeEventListener("click", handleAttack);
-      });
-    } else {
-      renderMiss(this);
-    }
-    this.removeEventListener("click", handleAttack);
-  }
 }
 
 newGame();
