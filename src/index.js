@@ -6,22 +6,18 @@ import { Player } from "../src/player";
 import { Gameboard } from "../src/gameboard";
 import { renderBoard } from "./ui/renderBoard";
 import { Ship } from "../src/ships";
-import { events } from "./pubSupPattern";
 import { handleAttack } from "./handleAttack";
+import { events } from "./pubSupPattern";
 
 function newGame() {
   const player1 = Player();
   const player2 = Player();
 
-  const gamenboard1 = Gameboard();
-  const gamenboard2 = Gameboard();
-
-  events.emit("attack your board", gamenboard1);
-  events.emit("attack enemy board", gamenboard2);
+  const gameboard1 = Gameboard();
+  const gameboard2 = Gameboard();
 
   renderBoard();
 
-  // Define ship lengths and positions
   const ships = [
     { length: 5, x: 1, y: 1, direction: "h" },
     { length: 4, x: 1, y: 8, direction: "v" },
@@ -31,22 +27,51 @@ function newGame() {
     { length: 2, x: 8, y: 1, direction: "h" },
   ];
 
-  // Place ships for both players
   ships.forEach(({ length, x, y, direction }) => {
-    const ship1 = Ship(length);
-    const ship2 = Ship(length);
-    gamenboard1.placeShip(x, y, ship1, direction);
-    gamenboard2.placeShip(x, y, ship2, direction);
+    gameboard1.placeShip(x, y, Ship(length), direction);
+    gameboard2.placeShip(x, y, Ship(length), direction);
   });
 
-  // Add click events to enemy board cells
-  const board = document.querySelectorAll(".enemy-gameboard .board-cell");
+  let currentPlayer = player1;
+  let currentGameboard = gameboard2;
+  let currentGameboardSelector = ".gameboard-2";
 
-  board.forEach((cell) => {
-    cell.addEventListener("click", () => {
-      handleAttack(player1, gamenboard2, cell);
+  function changeTurn() {
+    currentPlayer = currentPlayer === player1 ? player2 : player1;
+    currentGameboard = currentPlayer === player1 ? gameboard2 : gameboard1;
+    currentGameboardSelector =
+      currentPlayer === player1 ? ".gameboard-2" : ".gameboard-1";
+    setEventListeners();
+  }
+
+  function setEventListeners() {
+    document.querySelectorAll(".board-cell").forEach((cell) => {
+      cell.removeEventListener("click", handleCellClick);
     });
-  });
+
+    const cells =
+      currentPlayer === player1
+        ? document.querySelectorAll(".gameboard-2 .board-cell")
+        : document.querySelectorAll(".gameboard-1 .board-cell");
+
+    cells.forEach((cell) => {
+      cell.addEventListener("click", handleCellClick);
+    });
+  }
+
+  function handleCellClick(event) {
+    const cell = event.currentTarget;
+    handleAttack([
+      currentPlayer,
+      currentGameboard,
+      cell,
+      currentGameboardSelector,
+    ]);
+    cell.removeEventListener("click", handleCellClick);
+  }
+
+  events.on("changeTurn", changeTurn);
+  setEventListeners();
 }
 
 newGame();

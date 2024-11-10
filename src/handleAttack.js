@@ -2,53 +2,74 @@ import { renderHit, renderMiss } from "./ui/renderAttack";
 import { getImmediateDiagonalCells } from "./ui/helperFunctions";
 import { getAllNeighboringCells } from "./ui/helperFunctions";
 import { getCors } from "./ui/helperFunctions";
+import { events } from "./pubSupPattern";
 
-export function handleAttack(player, enemyGameboard, cell) {
+export const handleAttack = function ([
+  player,
+  gameboard,
+  cell,
+  gameboardSelector,
+]) {
   const [x, y] = getCors(cell);
-  const attackResult = player.attackEnemy(enemyGameboard, x, y);
+  const attackResult = player.attackEnemy(gameboard, x, y);
 
   if (attackResult.hit) {
     renderHit(cell);
 
     if (attackResult.sunk) {
-      const shipPositions = attackResult.ship.positions;
-      [shipPositions[0], shipPositions[shipPositions.length - 1]].forEach(
-        ([cellX, cellY]) => {
-          getAllNeighboringCells(cellX, cellY).forEach(([nx, ny]) => {
-            if (!enemyGameboard.receiveAttack(nx, ny).hit) {
-              const neighborCell = document.querySelector(
-                `.enemy-gameboard [data-cors="${nx},${ny}"]`
-              );
-              if (neighborCell) {
-                renderMiss(neighborCell);
-                neighborCell.removeEventListener("click", () =>
-                  handleAttack(player, enemyGameboard, neighborCell)
-                );
-              }
-            }
-          });
-        }
+      markSurroundingCellsAsMiss(
+        attackResult.ship,
+        gameboard,
+        gameboardSelector
       );
     } else {
       getImmediateDiagonalCells(x, y).forEach(([dx, dy]) => {
-        if (!enemyGameboard.receiveAttack(dx, dy).hit) {
-          const diagonalCell = document.querySelector(
-            `.enemy-gameboard [data-cors="${dx},${dy}"]`
-          );
-          if (diagonalCell) {
-            renderMiss(diagonalCell);
-            diagonalCell.removeEventListener("click", () =>
-              handleAttack(player, enemyGameboard, diagonalCell)
-            );
-          }
-        }
+        markMiss(dx, dy, gameboardSelector);
       });
     }
   } else {
     renderMiss(cell);
+    events.emit("changeTurn");
   }
 
-  cell.removeEventListener("click", () =>
-    handleAttack(player, enemyGameboard, cell)
+  if (gameboard.allShipsSunk()) {
+    console.log("win"); // Show win message
+  }
+};
+
+function markMiss(x, y, gameboardSelector) {
+  const cell = document.querySelector(
+    `${gameboardSelector} [data-cors="${x},${y}"]`
   );
+  if (cell && !cell.classList.contains("hit")) {
+    renderMiss(cell);
+    removeEL(cell);
+  }
 }
+
+function markSurroundingCellsAsMiss(ship, gameboard, gameboardSelector) {
+  // Get first and last positions of the ship to mark only necessary surrounding cells
+  const firstPos = ship.positions[0];
+  const lastPos = ship.positions[ship.positions.length - 1];
+
+  [firstPos, lastPos].forEach(([x, y]) => {
+    getAllNeighboringCells(x, y).forEach(([nx, ny]) => {
+      const neighborCell = document.querySelector(
+        `${gameboardSelector} [data-cors="${nx},${ny}"]`
+      );
+
+      // Only mark as miss if the cell is empty (not a ship part) and not already hit
+      if (neighborCell && !gameboard.receiveAttack(nx, ny).hit) {
+        renderMiss(neighborCell);
+        removeEL(neighborCell);
+      }
+    });
+  });
+}
+
+function removeEL(originalElement) {
+  const clonedElement = originalElement.cloneNode(true);
+  originalElement.parentNode.replaceChild(clonedElement, originalElement);
+}
+
+events.on("submit-attack", handleAttack);

@@ -28,13 +28,14 @@ export const Gameboard = function () {
     } else if (target !== "miss") {
       target.hit();
       return { hit: true, sunk: target.isSunk(), ship: target };
-    } else {
-      return { hit: true, sunk: true, ship: target };
     }
+    return { hit: false, sunk: false };
   }
 
   function allShipsSunk() {
-    return ships.every((ship) => ship.isSunk);
+    return ships.every((ship) => {
+      return ship.isSunk();
+    });
   }
 
   return { placeShip, receiveAttack, allShipsSunk };

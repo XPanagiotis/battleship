@@ -1,8 +1,8 @@
 import { createDOMElement } from "./domHelperFunctions/createElement";
 
 export const renderBoard = function () {
-  const yourBoard = document.querySelector(".your-gameboard");
-  const enemyBoard = document.querySelector(".enemy-gameboard");
+  const yourBoard = document.querySelector(".gameboard-1");
+  const enemyBoard = document.querySelector(".gameboard-2");
 
   yourBoard.appendChild(createBoard());
   enemyBoard.appendChild(createBoard());
