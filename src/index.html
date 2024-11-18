@@ -3,25 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Battleship</title>
+    <title>Battleship Game</title>
   </head>
   <body>
-    <header>
-      <div class="title-container">
-        <div>Battleship</div>
-        <img src="" alt="" />
-      </div>
+    <div class="game-container">
+      <header class="game-header">
+        <h1>Battleship Game</h1>
+        <p class="game-status"><span id="game-status">Player 1</span>'s Turn</p>
+      </header>
 
-      <div class="messages">Place the ships</div>
-    </header>
-
-    <div class="gameboard-container">
-      <div class="gameboard gameboard-1">
-        <!--Gameboard will load here-->
-      </div>
-      <div class="gameboard gameboard-2">
-        <!--Gameboard will load here-->
-      </div>
+      <main class="gameboards">
+        <section class="gameboard-container">
+          <h2>Player 1's Board</h2>
+          <div class="gameboard gameboard-1"></div>
+        </section>
+        <section class="gameboard-container">
+          <h2>Player 2's Board</h2>
+          <div class="gameboard gameboard-2"></div>
+        </section>
+      </main>
     </div>
   </body>
 </html>

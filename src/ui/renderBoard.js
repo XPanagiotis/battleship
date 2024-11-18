@@ -4,22 +4,24 @@ export const renderBoard = function () {
   const yourBoard = document.querySelector(".gameboard-1");
   const enemyBoard = document.querySelector(".gameboard-2");
 
-  yourBoard.appendChild(createBoard());
-  enemyBoard.appendChild(createBoard());
+  // Render boards for Player 1 and Player 2
+  yourBoard.appendChild(createBoard("Player 1"));
+  enemyBoard.appendChild(createBoard("Player 2"));
 };
 
-function createBoard() {
+function createBoard(player) {
   const table = createDOMElement("table", "board-table");
   const tableBody = createDOMElement("tbody");
 
   // Create rows
-  for (var i = 0; i < 10; i++) {
-    var boardRow = createDOMElement("tr", "board-row");
+  for (let i = 0; i < 10; i++) {
+    const boardRow = createDOMElement("tr", "board-row");
 
     // Create columns
-    for (var j = 0; j < 10; j++) {
-      var boardColumn = createDOMElement("td", "board-cell");
-      boardColumn.dataset.cors = `${[i, j]}`;
+    for (let j = 0; j < 10; j++) {
+      const boardColumn = createDOMElement("td", "board-cell");
+      boardColumn.dataset.cors = `${i},${j}`; // Coordinate data attribute
+
       // Place indicators in the first row
       if (j <= 10 && i === 0) {
         const indicator = createDOMElement(
@@ -44,7 +46,7 @@ function createBoard() {
     }
     tableBody.appendChild(boardRow);
   }
-  table.appendChild(tableBody);
 
+  table.appendChild(tableBody);
   return table;
 }

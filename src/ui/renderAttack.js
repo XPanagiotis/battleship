@@ -1,7 +1,7 @@
 export const renderHit = function (cell) {
-  cell.style.backgroundColor = "red";
+  cell.classList.add("hit");
 };
 
 export const renderMiss = function (cell) {
-  cell.style.backgroundColor = "green";
+  cell.classList.add("miss");
 };

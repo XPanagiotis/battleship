@@ -1,6 +1,7 @@
 //import styles
 import "./ui/styles/general.css";
 import "./ui/styles/gameboard.css";
+
 //import js modules
 import { Player } from "../src/player";
 import { Gameboard } from "../src/gameboard";
@@ -8,6 +9,7 @@ import { renderBoard } from "./ui/renderBoard";
 import { Ship } from "../src/ships";
 import { handleAttack } from "./handleAttack";
 import { events } from "./pubSupPattern";
+import { updateUi } from "./ui/changeTurns";
 
 function newGame() {
   const player1 = Player();
@@ -42,6 +44,7 @@ function newGame() {
     currentGameboardSelector =
       currentPlayer === player1 ? ".gameboard-2" : ".gameboard-1";
     setEventListeners();
+    updateUi();
   }
 
   function setEventListeners() {
