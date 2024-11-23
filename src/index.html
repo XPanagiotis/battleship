@@ -9,17 +9,31 @@
     <div class="game-container">
       <header class="game-header">
         <h1>Battleship Game</h1>
-        <p class="game-status"><span id="game-status">Player 1</span>'s Turn</p>
+        <p><span id="game-status">Player 1's Turn</span></p>
       </header>
 
       <main class="gameboards">
         <section class="gameboard-container">
           <h2>Player 1's Board</h2>
           <div class="gameboard gameboard-1"></div>
+          <div class="button-container">
+            <button id="randomise-gameboard" data-gameboard="1">
+              Randomise
+            </button>
+            <button id="reset-gameboard" data-gameboard="1">Reset</button>
+            <button id="reveal-ships" data-gameboard="1">Reveal Ships</button>
+          </div>
         </section>
         <section class="gameboard-container">
           <h2>Player 2's Board</h2>
           <div class="gameboard gameboard-2"></div>
+          <div class="button-container">
+            <button id="randomise-gameboard" data-gameboard="2">
+              Randomise
+            </button>
+            <button id="reset-gameboard" data-gameboard="2">Reset</button>
+            <button id="reveal-ships" data-gameboard="2">Reveal Ships</button>
+          </div>
         </section>
       </main>
     </div>

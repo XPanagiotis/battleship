@@ -1,0 +1,128 @@
+.edit-screen {
+  max-width: 1000px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.edit-screen > h2 {
+  padding-top: 1em;
+  text-align: center;
+}
+.board-to-edit {
+  width: 100%;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  gap: 4em;
+  padding: 2em 3em 1em 3em;
+}
+
+.board-to-edit > .gameboard {
+  flex: 1;
+}
+
+.ships-container {
+  max-width: 420px;
+  flex: 1;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: 2px;
+}
+
+.drag-instructions {
+  width: 100%;
+}
+
+.ship {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 0.4em;
+  cursor: grab;
+  user-select: none;
+  transition: background-color 0.3s ease;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.ship:first-of-type {
+  grid-column: span var(--ship-length);
+  grid-row: 1;
+}
+
+.ship:nth-of-type(2) {
+  grid-column: span var(--ship-length);
+  grid-row: 3;
+}
+
+.ship:nth-of-type(3) {
+  grid-column: 1 / span var(--ship-length);
+  grid-row: 5;
+}
+
+.ship:nth-of-type(4) {
+  grid-column: 5 / span var(--ship-length);
+  grid-row: 5;
+}
+
+.ship:nth-of-type(5) {
+  grid-column: 1 / span var(--ship-length);
+  grid-row: 7;
+}
+
+.ship:nth-of-type(6) {
+  grid-column: 4 / span var(--ship-length);
+  grid-row: 7;
+}
+
+.ship:active {
+  cursor: grabbing;
+}
+
+.ship.dragging {
+  opacity: 0.6;
+}
+
+.ship-placed {
+  background: red; /* Color to indicate the ship's placement */
+}
+/* Hover effect for potential ship placement */
+.board-cell.hover {
+  background: rgba(255, 0, 0, 0.3); /* Light red to indicate placement */
+}
+
+/* Mark cells occupied by ships */
+.board-cell.ship-placed {
+  background: red; /* Solid red for placed ships */
+}
+
+.edit-screen .button-container {
+  padding: 1em 0 2em 0;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .board-to-edit {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+  }
+
+  .ships-container {
+    width: 100%;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(7, 1fr);
+  }
+
+  .ship {
+    aspect-ratio: var(--ship-length) / 1;
+  }
+}

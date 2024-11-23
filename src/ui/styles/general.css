@@ -10,8 +10,8 @@ body {
   font-family: Arial, sans-serif;
   color: white;
   background: url("/dist/50748c452ab29a2bf67d.jpg") no-repeat center center
-    fixed; /* Background image */
-  background-size: cover; /* Ensure the image covers the entire screen */
+    fixed;
+  background-size: cover;
   min-height: 100vh;
   display: flex;
   justify-content: center;

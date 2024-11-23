@@ -38,5 +38,5 @@ export const Gameboard = function () {
     });
   }
 
-  return { placeShip, receiveAttack, allShipsSunk };
+  return { placeShip, receiveAttack, allShipsSunk, ships, board };
 };
